@@ -17,9 +17,15 @@
 
   :root{
     --bg-0:#0b0c12;
-    --bg-1:#141327;
-    --bg-2:#1a2230;
-    --bg-3:#221a2c;
+    --bg-1:#2c2059;
+    --bg-2:#123c3f;
+    --bg-3:#3a1638;
+    --bg-4:#1c2a52;
+    --bg-1d:#4a3220;
+    --bg-2d:#173832;
+    --bg-3d:#442038;
+    --bg-4d:#2a3a2c;
+    --accent-d:#c9a97a;
     --surface: rgba(255,255,255,0.055);
     --surface-strong: rgba(255,255,255,0.09);
     --border: rgba(255,255,255,0.14);
@@ -83,43 +89,101 @@
     opacity:0.5;
   }
 
+  .bg-motion{
+    position:absolute;
+    inset:-15%;
+    animation: hueBreathe 52s ease-in-out infinite;
+    transition: opacity 750ms ease;
+  }
+
+  .bg-motion-detail{
+    position:absolute;
+    inset:-15%;
+    opacity:0;
+    animation: hueBreathe 60s ease-in-out infinite;
+    transition: opacity 750ms ease;
+  }
+
+  body.detail-open .bg-motion{ opacity:0; }
+  body.detail-open .bg-motion-detail{ opacity:1; }
+
+  @keyframes hueBreathe{
+    0%,100%{ filter: hue-rotate(0deg); }
+    50%{ filter: hue-rotate(14deg); }
+  }
+
   .blob{
     position:absolute;
     border-radius:50%;
-    filter: blur(90px);
-    opacity:0.55;
+    filter: blur(68px);
+    opacity:0.8;
     will-change: transform;
   }
   .blob.b1{
-    width:52vmax; height:52vmax;
-    left:-18vmax; top:-16vmax;
+    width:56vmax; height:56vmax;
+    left:-20vmax; top:-18vmax;
     background: radial-gradient(circle at 30% 30%, var(--bg-1), transparent 70%);
-    animation: drift1 34s ease-in-out infinite;
+    animation: drift1 26s ease-in-out infinite;
   }
   .blob.b2{
-    width:46vmax; height:46vmax;
-    right:-14vmax; top:8vmax;
+    width:50vmax; height:50vmax;
+    right:-16vmax; top:6vmax;
     background: radial-gradient(circle at 60% 40%, var(--bg-3), transparent 70%);
-    animation: drift2 40s ease-in-out infinite;
+    animation: drift2 32s ease-in-out infinite;
   }
   .blob.b3{
-    width:50vmax; height:50vmax;
-    left:12vmax; bottom:-22vmax;
+    width:54vmax; height:54vmax;
+    left:10vmax; bottom:-24vmax;
     background: radial-gradient(circle at 50% 50%, var(--bg-2), transparent 70%);
-    animation: drift3 46s ease-in-out infinite;
+    animation: drift3 36s ease-in-out infinite;
+  }
+  .blob.b4{
+    width:38vmax; height:38vmax;
+    left:50%; top:38%;
+    background: radial-gradient(circle at 50% 50%, var(--bg-4), transparent 70%);
+    animation: drift4 30s ease-in-out infinite;
   }
 
   @keyframes drift1{
-    0%,100%{ transform: translate(0,0) scale(1); }
-    50%{ transform: translate(6vmax, 5vmax) scale(1.08); }
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(11vmax, 9vmax) rotate(20deg) scale(1.15); }
   }
   @keyframes drift2{
-    0%,100%{ transform: translate(0,0) scale(1); }
-    50%{ transform: translate(-5vmax, 6vmax) scale(1.1); }
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(-10vmax, 11vmax) rotate(-18deg) scale(1.18); }
   }
   @keyframes drift3{
-    0%,100%{ transform: translate(0,0) scale(1); }
-    50%{ transform: translate(4vmax, -6vmax) scale(1.06); }
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(9vmax, -10vmax) rotate(16deg) scale(1.1); }
+  }
+  @keyframes drift4{
+    0%,100%{ transform: translate(-50%,-50%) scale(0.9); }
+    50%{ transform: translate(-42%,-58%) scale(1.2); }
+  }
+
+  .blob.b1d{
+    width:54vmax; height:54vmax;
+    left:-16vmax; top:-14vmax;
+    background: radial-gradient(circle at 35% 35%, var(--bg-1d), transparent 70%);
+    animation: drift2 30s ease-in-out infinite;
+  }
+  .blob.b2d{
+    width:48vmax; height:48vmax;
+    right:-18vmax; top:10vmax;
+    background: radial-gradient(circle at 55% 45%, var(--bg-2d), transparent 70%);
+    animation: drift3 34s ease-in-out infinite;
+  }
+  .blob.b3d{
+    width:52vmax; height:52vmax;
+    left:8vmax; bottom:-20vmax;
+    background: radial-gradient(circle at 50% 50%, var(--bg-3d), transparent 70%);
+    animation: drift1 28s ease-in-out infinite;
+  }
+  .blob.b4d{
+    width:36vmax; height:36vmax;
+    left:50%; top:42%;
+    background: radial-gradient(circle at 50% 50%, var(--bg-4d), transparent 70%);
+    animation: drift4 26s ease-in-out infinite;
   }
 
   .grain{
@@ -130,17 +194,33 @@
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
-  /* ---------- card wrapper (perspective for tilt) ---------- */
+  /* ---------- card wrapper (perspective for tilt + flip) ---------- */
 
-  .stage{
+  .scene{
     position:relative;
     z-index:1;
     width:100%;
     max-width:400px;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
     perspective: 1200px;
   }
 
-  .card{
+  .flipper{
+    position:relative;
+    display:grid;
+    width:100%;
+    transform-style: preserve-3d;
+    transition: transform 650ms cubic-bezier(.22,1,.36,1);
+    will-change: transform;
+    cursor:pointer;
+  }
+
+  .card-face{
+    grid-area: 1 / 1;
     position:relative;
     width:100%;
     padding:38px 28px 30px;
@@ -150,12 +230,11 @@
     backdrop-filter: blur(22px) saturate(140%);
     -webkit-backdrop-filter: blur(22px) saturate(140%);
     box-shadow: var(--shadow-deep), inset 0 1px 0 rgba(255,255,255,0.06);
-    transform-style: preserve-3d;
-    transition: transform 500ms cubic-bezier(.22,1,.36,1);
-    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
-  .card::before{
+  .card-face::before{
     content:"";
     position:absolute;
     inset:0;
@@ -164,12 +243,229 @@
     pointer-events:none;
   }
 
+  .card-back{
+    transform: rotateY(180deg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
   .card-inner{
     transform: translateZ(30px);
     display:flex;
     flex-direction:column;
     align-items:center;
     text-align:center;
+  }
+
+  .back-inner{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    padding: 10px 6px;
+  }
+
+  .back-mark{
+    font-size:20px;
+    color: var(--accent);
+    opacity:0.85;
+  }
+
+  .back-quote{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    color: var(--text-0);
+    margin:0;
+    max-width: 280px;
+  }
+
+  .back-note{
+    font-size:12px;
+    color: var(--text-2);
+    margin:0;
+  }
+
+  .flip-hint{
+    text-align:center;
+    font-size:12px;
+    color: var(--text-2);
+    margin-top:16px;
+    animation: hintPulse 3.4s ease-in-out infinite;
+  }
+
+  @keyframes hintPulse{
+    0%,100%{ opacity:0.45; }
+    50%{ opacity:0.85; }
+  }
+
+  /* ---------- detail toggle + panel scene ---------- */
+
+  .detail-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    margin-top:18px;
+    padding:12px 16px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border:1px solid var(--border-soft);
+    color: var(--text-1);
+    font: inherit;
+    font-size:13.5px;
+    cursor:pointer;
+    transition: transform 220ms ease, background 220ms ease, border-color 220ms ease, color 220ms ease;
+  }
+  .detail-toggle:hover{
+    transform: translateY(-2px);
+    background: var(--surface-strong);
+    border-color: var(--accent-soft);
+    color: var(--text-0);
+  }
+  .detail-toggle svg{
+    width:14px; height:14px;
+    transition: transform 350ms ease;
+  }
+  body.detail-open .detail-toggle svg{ transform: rotate(180deg); }
+
+  .view{
+    transition: opacity 420ms ease, transform 420ms ease;
+    opacity:1;
+    transform: translateY(0) scale(1);
+  }
+  .view.view-out{
+    opacity:0;
+    transform: translateY(10px) scale(0.98);
+    pointer-events:none;
+  }
+
+  .panel{
+    padding:32px 26px 28px;
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    border:1px solid var(--border);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    box-shadow: var(--shadow-deep), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .panel-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+  }
+
+  .back-btn{
+    width:34px; height:34px;
+    flex:0 0 auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: var(--surface-strong);
+    border:1px solid var(--border-soft);
+    color: var(--text-0);
+    cursor:pointer;
+  }
+  .back-btn svg{ width:16px; height:16px; }
+
+  .panel-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:17px;
+    color: var(--text-0);
+    margin:0;
+  }
+
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .stat{
+    flex:1;
+    padding:12px 14px;
+    border-radius:16px;
+    background: var(--surface-strong);
+    border:1px solid var(--border-soft);
+  }
+  .stat-label{
+    display:block;
+    font-size:11.5px;
+    color: var(--text-2);
+    margin-bottom:3px;
+  }
+  .stat-value{
+    display:block;
+    font-size:14.5px;
+    color: var(--text-0);
+    font-weight:500;
+  }
+
+  .panel-section{
+    margin-bottom:22px;
+  }
+  .panel-section:last-child{ margin-bottom:0; }
+
+  .panel-heading{
+    font-size:13px;
+    color: var(--text-1);
+    margin:0 0 10px;
+  }
+
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    padding:6px 13px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-strong);
+    border:1px solid var(--border-soft);
+    font-size:12.5px;
+    color: var(--text-1);
+  }
+
+  .timeline{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    padding-left:16px;
+    border-left:1px solid var(--border-soft);
+  }
+  .timeline-item{
+    position:relative;
+  }
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-20.5px;
+    top:5px;
+    width:7px; height:7px;
+    border-radius:50%;
+    background: var(--accent-d);
+  }
+  .timeline-year{
+    font-size:11.5px;
+    color: var(--text-2);
+    margin:0 0 2px;
+  }
+  .timeline-title{
+    font-size:13.5px;
+    color: var(--text-0);
+    margin:0;
+    font-weight:500;
+  }
+  .timeline-desc{
+    font-size:12.5px;
+    color: var(--text-1);
+    margin:3px 0 0;
+    line-height:1.5;
   }
 
   /* ---------- avatar ---------- */
@@ -372,43 +668,107 @@
 
   @media (prefers-reduced-motion: reduce){
     .blob{ animation:none; }
+    .bg-motion{ animation:none; }
+    .bg-motion-detail{ animation:none; }
     .avatar-ring{ animation:none; }
-    .card{ transition:none; }
+    .flipper{ transition:none; }
   }
 </style>
 </head>
 <body>
 
   <div class="bg" aria-hidden="true">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-    <div class="blob b3"></div>
+    <div class="bg-motion">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="blob b4"></div>
+    </div>
+    <div class="bg-motion-detail">
+      <div class="blob b1d"></div>
+      <div class="blob b2d"></div>
+      <div class="blob b3d"></div>
+      <div class="blob b4d"></div>
+    </div>
     <div class="grain"></div>
   </div>
 
-  <div class="stage">
-    <div class="card" id="card">
-      <div class="card-inner">
-        <div class="avatar-wrap">
-          <div class="avatar-ring"></div>
-          <div class="avatar">
-            <img id="avatarImg" src="" alt="Foto profil">
+  <div class="scene" id="scene">
+    <div class="stage view" id="stageView">
+      <div class="flipper" id="flipper">
+        <div class="card-face" id="card">
+          <div class="card-inner">
+            <div class="avatar-wrap">
+              <div class="avatar-ring"></div>
+              <div class="avatar">
+                <img id="avatarImg" src="" alt="Foto profil">
+              </div>
+            </div>
+
+            <h1 class="name" id="nameText"></h1>
+            <p class="username" id="usernameText"></p>
+            <p class="tagline" id="taglineText"></p>
+
+            <div class="socials" id="socialRow"></div>
+
+            <div class="divider"><span class="line"></span><span id="dividerLabel">Proyek &amp; toko</span><span class="line"></span></div>
+
+            <div class="stores" id="storeList"></div>
           </div>
         </div>
 
-        <h1 class="name" id="nameText"></h1>
-        <p class="username" id="usernameText"></p>
-        <p class="tagline" id="taglineText"></p>
-
-        <div class="socials" id="socialRow"></div>
-
-        <div class="divider"><span class="line"></span><span id="dividerLabel">Proyek &amp; toko</span><span class="line"></span></div>
-
-        <div class="stores" id="storeList"></div>
+        <div class="card-face card-back">
+          <div class="back-inner">
+            <span class="back-mark">✦</span>
+            <p class="back-quote" id="backQuote"></p>
+            <p class="back-note">ketuk lagi buat balik</p>
+          </div>
+        </div>
       </div>
+
+      <button class="detail-toggle" id="openDetail" type="button">
+        <span>Lihat profil lengkap</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <p class="flip-hint">ketuk kartu buat lihat sisi lain</p>
+      <footer class="credit" id="creditText"></footer>
     </div>
 
-    <footer class="credit" id="creditText"></footer>
+    <div class="view panel" id="panelView" hidden>
+      <div class="panel-head">
+        <button class="back-btn" id="closeDetail" type="button" aria-label="Kembali ke kartu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h2 class="panel-title">Profil lengkap</h2>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-label">Kota</span>
+          <span class="stat-value" id="cityVal"></span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Umur</span>
+          <span class="stat-value" id="ageVal"></span>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-heading">Skill</p>
+        <div class="tag-row" id="skillTags"></div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-heading">Hobi</p>
+        <div class="tag-row" id="hobbyTags"></div>
+      </div>
+
+      <div class="panel-section">
+        <p class="panel-heading">Pengalaman</p>
+        <div class="timeline" id="experienceList"></div>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -450,8 +810,30 @@ stores: [
     url: "https://doominiksstore.xyz"
   }
 ],
-  dividerLabel: "Proyek & toko",
-  credit: "© 2020 Niksoliesamphink" // isi contoh: "" — kosongkan kalau tidak perlu
+  dividerLabel: "Project Gabut",
+  credit: "© 2020 Niksoliesamphink", // isi contoh: "" — kosongkan kalau tidak perlu
+
+  // Kata-kata di balik kartu — ganti/tambah/kurangi bebas, satu dipilih acak tiap kartu dibalik
+  backQuotes: [
+    "Cinta itu commit tanpa rollback — sekali push, udah nggak ada opsi batal.",
+    "Kalau hati bisa di-debug, mungkin nggak ada yang patah diam-diam.",
+    "Rindu itu proses background — kelihatan idle, padahal jalan terus.",
+    "Katanya first love itu kayak legacy code: susah dihapus, tapi banyak ngajarin.",
+    "Setiap orang nyimpen satu null pointer di hatinya, sampai ketemu yang bikin ke-initialize."
+  ],
+
+  // Isi panel "Lihat profil lengkap" — ganti semua nilai di bawah ini
+  about: {
+    city: "Jakarta",
+    age: "Ga ada yang tau",
+    skills: ["Python", "discord.py", "Node.js", "Firebase", "Design grafis",],
+    hobbies: ["Tidur", "Ngoding kalo gabut", "Push Imo"],
+    experience: [
+      { year: "2022", title: "Mulai bikin bot Discord", desc: "Belajar discord.py dari nol, bikin bot pertama buat komunitas sendiri." },
+      { year: "2024", title: "Buka Doominiks Store", desc: "Rilis toko top-up game pertama, doominiksstore.xyz." },
+      { year: "2025", title: "Kembangin beberapa bot & bot premium", desc: "Nocturne, Noctra Assistant, Startdoom, JoyCannot, Vallent-EXS, dan proyek lainnya berjalan paralel." }
+    ]
+  }
 };
 
 /* ================================================================
@@ -525,18 +907,72 @@ function render(){
   if (CONFIG.credit) {
     document.getElementById('creditText').textContent = CONFIG.credit;
   }
+
+  const about = CONFIG.about || {};
+  document.getElementById('cityVal').textContent = about.city || "—";
+  document.getElementById('ageVal').textContent = about.age || "—";
+
+  const skillTags = document.getElementById('skillTags');
+  skillTags.innerHTML = "";
+  (about.skills || []).forEach(sk => {
+    const t = document.createElement('span');
+    t.className = "tag";
+    t.textContent = sk;
+    skillTags.appendChild(t);
+  });
+
+  const hobbyTags = document.getElementById('hobbyTags');
+  hobbyTags.innerHTML = "";
+  (about.hobbies || []).forEach(h => {
+    const t = document.createElement('span');
+    t.className = "tag";
+    t.textContent = h;
+    hobbyTags.appendChild(t);
+  });
+
+  const experienceList = document.getElementById('experienceList');
+  experienceList.innerHTML = "";
+  (about.experience || []).forEach(ex => {
+    const item = document.createElement('div');
+    item.className = "timeline-item";
+    item.innerHTML = `
+      <p class="timeline-year"></p>
+      <p class="timeline-title"></p>
+      <p class="timeline-desc"></p>`;
+    item.querySelector('.timeline-year').textContent = ex.year || "";
+    item.querySelector('.timeline-title').textContent = ex.title || "";
+    item.querySelector('.timeline-desc').textContent = ex.desc || "";
+    experienceList.appendChild(item);
+  });
 }
 
 render();
 
-/* ---------- tilt on pointer move / drag ---------- */
+/* ---------- tilt on pointer move/drag + click-to-flip ---------- */
 
-const card = document.getElementById('card');
+const flipper = document.getElementById('flipper');
 const stage = document.querySelector('.stage');
+const backQuoteEl = document.getElementById('backQuote');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let rect = null;
 let raf = null;
+let flipped = false;
+let lastQuoteIndex = -1;
+
+function pickBackQuote(){
+  const pool = CONFIG.backQuotes || [];
+  if (!pool.length) return;
+  let i = Math.floor(Math.random() * pool.length);
+  if (pool.length > 1 && i === lastQuoteIndex) i = (i + 1) % pool.length;
+  lastQuoteIndex = i;
+  backQuoteEl.textContent = pool[i];
+}
+
+function applyTransform(tiltX, tiltY){
+  const flipDeg = flipped ? 180 : 0;
+  flipper.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY + flipDeg}deg)`;
+}
 
 function updateTilt(clientX, clientY){
   if (!rect) rect = stage.getBoundingClientRect();
@@ -546,15 +982,32 @@ function updateTilt(clientX, clientY){
   const rotX = (0.5 - py) * 16;
 
   if (raf) cancelAnimationFrame(raf);
-  raf = requestAnimationFrame(() => {
-    card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-  });
+  raf = requestAnimationFrame(() => applyTransform(rotX, rotY));
 }
 
 function resetTilt(){
   if (raf) cancelAnimationFrame(raf);
-  card.style.transform = "rotateX(0deg) rotateY(0deg)";
+  applyTransform(0, 0);
 }
+
+flipper.addEventListener('click', (e) => {
+  if (e.target.closest('a')) return; // biar link sosmed/store tetap bisa diklik normal
+  flipped = !flipped;
+  if (flipped) pickBackQuote();
+  resetTilt();
+});
+
+flipper.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    flipped = !flipped;
+    if (flipped) pickBackQuote();
+    resetTilt();
+  }
+});
+flipper.setAttribute('tabindex', '0');
+flipper.setAttribute('role', 'button');
+flipper.setAttribute('aria-label', 'Jangan Liat Dosa');
 
 if (!reduceMotion){
   window.addEventListener('resize', () => { rect = null; });
@@ -571,6 +1024,35 @@ if (!reduceMotion){
   }, { passive: true });
   stage.addEventListener('touchend', resetTilt);
 }
+
+/* ---------- detail panel: swaps view + background scene ---------- */
+
+const stageView = document.getElementById('stageView');
+const panelView = document.getElementById('panelView');
+const openDetailBtn = document.getElementById('openDetail');
+const closeDetailBtn = document.getElementById('closeDetail');
+const SWAP_MS = reduceMotion ? 0 : 380;
+
+function swapView(hideEl, showEl){
+  hideEl.classList.add('view-out');
+  setTimeout(() => {
+    hideEl.hidden = true;
+    showEl.hidden = false;
+    // force reflow so the enter transition actually plays
+    void showEl.offsetWidth;
+    showEl.classList.remove('view-out');
+  }, SWAP_MS);
+}
+
+openDetailBtn.addEventListener('click', () => {
+  document.body.classList.add('detail-open');
+  swapView(stageView, panelView);
+});
+
+closeDetailBtn.addEventListener('click', () => {
+  document.body.classList.remove('detail-open');
+  swapView(panelView, stageView);
+});
 </script>
 </body>
 </html>
